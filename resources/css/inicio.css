@@ -1,0 +1,275 @@
+
+        @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@300;400;700&display=swap');
+        
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1a1a 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+            font-family: 'Roboto', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Efeito de fundo com logos da Marvel */
+        body::before {
+            content: "⚡";
+            font-size: 20rem;
+            color: rgba(255, 255, 255, 0.03);
+            position: fixed;
+            top: -100px;
+            right: -100px;
+            transform: rotate(15deg);
+            z-index: 0;
+            font-family: 'Bangers', cursive;
+        }
+        
+        body::after {
+            content: "MARVEL";
+            font-size: 15rem;
+            color: rgba(255, 255, 255, 0.02);
+            position: fixed;
+            bottom: -200px;
+            left: -100px;
+            transform: rotate(-15deg);
+            z-index: 0;
+            font-family: 'Bangers', cursive;
+            letter-spacing: 20px;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Card principal */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 2px #e23636 inset;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: slideUp 0.5s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Header Marvel */
+        .card-header {
+            background: linear-gradient(135deg, #e23636 0%, #b22222 100%);
+            color: white;
+            border-radius: 20px 20px 0 0 !important;
+            padding: 1.5rem;
+            border-bottom: 4px solid #ffd700;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 20px,
+                rgba(255, 255, 255, 0.1) 20px,
+                rgba(255, 255, 255, 0.1) 40px
+            );
+            transform: rotate(45deg);
+            pointer-events: none;
+        }
+        
+        .card-header h5 {
+            font-family: 'Bangers', cursive;
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            text-shadow: 3px 3px 0 #000;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Formulário */
+        .card-body {
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 0 0 20px 20px;
+        }
+        
+        /* Labels */
+        .form-label {
+            font-weight: 700;
+            color: #2d1a1a;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .required:after {
+            content: " *";
+            color: #e23636;
+            font-weight: bold;
+        }
+        
+        /* Inputs e Selects */
+        .form-control, .form-select {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #e23636;
+            box-shadow: 0 0 0 0.2rem rgba(226, 54, 54, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        .form-control:hover, .form-select:hover {
+            border-color: #b22222;
+        }
+        
+        /* Form text */
+        .form-text {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 0.4rem;
+            padding-left: 0.5rem;
+            border-left: 3px solid #e23636;
+        }
+        
+        /* Botões */
+        .btn {
+            padding: 0.75rem 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 10px;
+            border: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-marvel {
+            background: linear-gradient(135deg, #e23636 0%, #b22222 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(226, 54, 54, 0.4);
+        }
+        
+        .btn-marvel:hover {
+            background: linear-gradient(135deg, #b22222 0%, #8b1a1a 100%);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(226, 54, 54, 0.5);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #333 0%, #1a1a1a 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #444 0%, #222 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        .btn i {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+        
+        /* Grid para mobile */
+        @media (max-width: 768px) {
+            .card-header h5 {
+                font-size: 1.8rem;
+            }
+            
+            .card-body {
+                padding: 1.5rem;
+            }
+            
+            .btn {
+                padding: 0.6rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            
+            body::before {
+                font-size: 10rem;
+                top: -50px;
+                right: -50px;
+            }
+            
+            body::after {
+                font-size: 8rem;
+                bottom: -100px;
+                left: -50px;
+            }
+        }
+        
+        /* Animações nos inputs */
+        .row {
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+        }
+        
+        .row:nth-child(1) { animation-delay: 0.1s; }
+        .row:nth-child(2) { animation-delay: 0.2s; }
+        .row:nth-child(3) { animation-delay: 0.3s; }
+        .row:nth-child(4) { animation-delay: 0.4s; }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        /* Efeito de brilho nos botões */
+        .gap-2 {
+            margin-top: 2rem;
+            position: relative;
+        }
+        
+        .gap-2::before {
+            content: "";
+            position: absolute;
+            top: -1rem;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #e23636, #ffd700, #e23636, transparent);
+        }

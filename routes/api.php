@@ -1,24 +1,32 @@
 <?php
 
+use App\Http\Controllers\QuadrinhosController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\UsuarioController;
+use App\Http\Middleware\auth_api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TestController;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/teste',[TestController::class,'envia_teste']);
+// Rotas públicas da API
+Route::get('/teste', [TestController::class, 'envia_teste']);
+Route::get('/exibe_heroi/{id}', [TestController::class, 'exibe_heroi']);
+Route::post('/cadastro_usuario', [UsuarioController::class, 'cadastra_usuario']);
+Route::get('/login_novo', [UsuarioController::class, 'login']);
+Route::get('/herois', [TestController::class, 'lista_herois'])->name('herois');
 
-Route::get('/soma',[TestController::class,'soma']);
 
-Route::post('/salva_heroi',[TestController::class,'salva_heroi']);
-
-Route::get('/exibe_heroi/{id}',[TestController::class,'exibe_heroi']);
-
-Route::get('/todos_herois',[TestController::class,'todos_herois']);
-
-Route::put('/atualiza_heroi/{id}',[TestController::class,'atualiza_heroi']);
-
-Route::delete('/deleta_heroi/{id}',[TestController::class,'deleta_heroi']);
-
+Route::middleware([auth_api::class])->group(function () {
+    Route::post('/salva_heroi', [TestController::class, 'salva_heroi']);
+    Route::put('/altera_heroi', [TestController::class, 'altera_heroi']);
+    Route::delete('/deleta_heroi', [TestController::class, 'deleta_heroi']);
+    
+    Route::post('/salva_quadrinho', [QuadrinhosController::class, 'salva_quadrinho']);
+    Route::put('/edita_quadrinho', [QuadrinhosController::class, 'edita_quadrinho']);
+    Route::delete('/deleta_quadrinho', [QuadrinhosController::class, 'deleta_quadrinho']);
+ 
+    Route::get('/quadrinhos', [QuadrinhosController::class, 'lista_quadrinhos']);
+});

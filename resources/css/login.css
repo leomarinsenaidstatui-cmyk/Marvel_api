@@ -1,0 +1,182 @@
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><path d="M20 20 L30 20 L30 30 L20 30 Z" fill="%23ed1d24"/><path d="M40 40 L50 40 L50 50 L40 50 Z" fill="%23ed1d24"/><path d="M60 60 L70 60 L70 70 L60 70 Z" fill="%23ed1d24"/><circle cx="80" cy="20" r="5" fill="%23ed1d24"/><circle cx="15" cy="70" r="5" fill="%23ed1d24"/></svg>');
+            background-size: 200px 200px;
+        }
+
+        .marvel-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 0 2px #ed1d24, 0 0 0 5px #151515;
+            backdrop-filter: blur(10px);
+            border: none;
+            overflow: hidden;
+        }
+
+        .marvel-header {
+            background: linear-gradient(135deg, #ed1d24 0%, #b11313 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-bottom: 3px solid #ffd700;
+            position: relative;
+        }
+
+        .marvel-header::before {
+            content: "⚡";
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: #ffd700;
+        }
+
+        .marvel-header::after {
+            content: "⚡";
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: #ffd700;
+        }
+
+        .marvel-header h2 {
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 0;
+            font-family: 'Arial Black', sans-serif;
+            text-shadow: 2px 2px 0 #151515;
+        }
+
+        .marvel-header p {
+            margin: 5px 0 0;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 12px 15px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #ed1d24;
+            box-shadow: 0 0 0 0.2rem rgba(237, 29, 36, 0.25);
+            background-color: white;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-label i {
+            color: #ed1d24;
+            margin-right: 5px;
+            font-size: 16px;
+        }
+
+        .btn-marvel {
+            background: linear-gradient(135deg, #ed1d24 0%, #b11313 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 16px;
+            color: white;
+            border: 2px solid #ffd700;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-marvel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(237, 29, 36, 0.4);
+            background: linear-gradient(135deg, #ff1e26 0%, #d41515 100%);
+            color: white;
+        }
+
+        .btn-marvel:active {
+            transform: translateY(0);
+        }
+
+        .btn-marvel::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-marvel:hover::before {
+            left: 100%;
+        }
+
+        .hero-icon {
+            font-size: 24px;
+            color: #ed1d24;
+            margin-right: 10px;
+        }
+
+        .form-check-input:checked {
+            background-color: #ed1d24;
+            border-color: #ed1d24;
+        }
+
+        .login-link {
+            color: #ed1d24;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .login-link:hover {
+            color: #b11313;
+            text-decoration: underline;
+        }
+
+        .marvel-footer {
+            background: #151515;
+            color: #888;
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            border-top: 2px solid #ed1d24;
+        }
+
+        .marvel-footer i {
+            color: #ed1d24;
+        }
+
+        .input-group-text {
+            background-color: #ed1d24;
+            color: white;
+            border: none;
+            border-radius: 12px 0 0 12px;
+        }
+
+        .floating-avengers {
+            position: absolute;
+            font-size: 50px;
+            opacity: 0.1;
+            pointer-events: none;
+        }
