@@ -7,44 +7,53 @@ use App\Models\MarvelModel;
 
 class TestController extends Controller
 {
-    public function envia_teste(Request $request) {
-       
-    $data = [
-            "Corinthians" => "2x0",
-            'Numero' => $request->numero
-        ];
-        
-        return response()->json($data,200);
+    private function resolveUsuario(Request $request)
+    {
+        return $request->usuario ?? $request->user();
     }
 
-    public function soma(Request $request) {
-       
-    $data = [
-            "Corinthians" => "2x0",
+    public function envia_teste(Request $request)
+    {
+        $data = [
+            'Corinthians' => '2x0',
+            'Numero' => $request->numero,
+        ];
+
+        return response()->json($data, 200);
+    }
+
+    public function soma(Request $request)
+    {
+        $data = [
+            'Corinthians' => '2x0',
             'soma' => $request->numero + $request->numero_dois,
         ];
-        
-        return response()->json($data,200);
-        
+
+        return response()->json($data, 200);
     }
 
-    public function salva_heroi(Request $request) {
+    public function salva_heroi(Request $request)
+    {
         $request->validate([
             'nome' => 'required',
             'codinome' => 'required',
             'idade' => 'required',
             'habilidades' => 'required',
             'equipe' => 'required',
-            'primeira_aparicao' => 'required'
+            'primeira_aparicao' => 'required',
         ]);
 
         try {
+            $usuario = $this->resolveUsuario($request);
+            if (!$usuario) {
+                return response()->json([
+                    'erro' => 's',
+                    'msg' => 'Usuario nao autenticado',
+                ], 401);
+            }
+
             $marvel = new MarvelModel();
-            $usuario = $request->usuario;
-            
-            // CORREÇÃO 1: Adicionado user_id
             $marvel->user_id = $usuario->id;
-            
             $marvel->nome = $request->nome;
             $marvel->codinome = $request->codinome;
             $marvel->idade = $request->idade;
@@ -54,13 +63,12 @@ class TestController extends Controller
             $marvel->save();
 
             $data = [
-                'erro' => 'n',  // CORREÇÃO 2: Adicionado campo erro para consistência
+                'erro' => 'n',
                 'msg' => 'Heroi Salvo',
                 'heroi' => $marvel,
             ];
 
-            return response()->json($data,200);
-
+            return response()->json($data, 200);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -70,6 +78,13 @@ class TestController extends Controller
     {
         $marvel = MarvelModel::find($id);
 
+        if (!$marvel) {
+            return response()->json([
+                'erro' => 's',
+                'msg' => 'Heroi nao encontrado',
+            ], 404);
+        }
+
         $data = [
             'erro' => 'n',
             'heroi' => $marvel,
@@ -77,9 +92,10 @@ class TestController extends Controller
 
         return response()->json($data, 200);
     }
-    
-    public function todos_herois(Request $request) {
-        $marvel = MarvelModel::get()->all();
+
+    public function todos_herois(Request $request)
+    {
+        $marvel = MarvelModel::all();
 
         $data = [
             'erro' => 'n',
@@ -89,7 +105,6 @@ class TestController extends Controller
         return response()->json($data, 200);
     }
 
-    // CORREÇÃO 3: Método atualiza_heroi corrigido (não cria novo registro)
     public function atualiza_heroi(Request $request, $id)
     {
         $request->validate([
@@ -98,20 +113,33 @@ class TestController extends Controller
             'idade' => 'required',
             'habilidades' => 'required',
             'equipe' => 'required',
-            'primeira_aparicao' => 'required'
+            'primeira_aparicao' => 'required',
         ]);
 
         try {
-            // CORREÇÃO: Buscar o herói existente em vez de criar novo
+            $usuario = $this->resolveUsuario($request);
+            if (!$usuario) {
+                return response()->json([
+                    'erro' => 's',
+                    'msg' => 'Usuario nao autenticado',
+                ], 401);
+            }
+
             $marvel = MarvelModel::find($id);
-            
             if (!$marvel) {
                 return response()->json([
                     'erro' => 's',
-                    'msg' => 'Herói não encontrado'
+                    'msg' => 'Heroi nao encontrado',
                 ], 404);
             }
-            
+
+            if ($usuario->id != $marvel->user_id) {
+                return response()->json([
+                    'erro' => 's',
+                    'msg' => 'Usuario nao pode alterar o que nao cadastrou',
+                ], 403);
+            }
+
             $marvel->nome = $request->nome;
             $marvel->codinome = $request->codinome;
             $marvel->idade = $request->idade;
@@ -126,27 +154,28 @@ class TestController extends Controller
                 'heroi' => $marvel,
             ];
 
-            return response()->json($data,200);
-
+            return response()->json($data, 200);
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public function visualiza_heroi($heroi){
+    public function visualiza_heroi($heroi)
+    {
         $heroi = MarvelModel::find($heroi);
 
         return view('visualiza_heroi')->with('heroi', $heroi);
     }
 
-    public function mostra_heroi($heroi){
+    public function mostra_heroi($heroi)
+    {
         $heroi = MarvelModel::find($heroi);
 
         return view('alterar_heroi')->with('heroi', $heroi);
     }
 
-    // Método altera_heroi já está correto, mantido igual
-    public function altera_heroi(Request $request){
+    public function altera_heroi(Request $request)
+    {
         $request->validate([
             'nome' => 'required',
             'codinome' => 'required',
@@ -154,14 +183,27 @@ class TestController extends Controller
             'habilidades' => 'required',
             'equipe' => 'required',
             'primeira_aparicao' => 'required',
-            'heroi_id' => 'required'
+            'heroi_id' => 'required',
         ]);
 
         try {
-            $heroi = MarvelModel::find($request->heroi_id); 
-            $usuario = $request->usuario;
-            
-            if($usuario->id == $heroi->user_id){
+            $usuario = $this->resolveUsuario($request);
+            if (!$usuario) {
+                return response()->json([
+                    'erro' => 's',
+                    'msg' => 'Usuario nao autenticado',
+                ], 401);
+            }
+
+            $heroi = MarvelModel::find($request->heroi_id);
+            if (!$heroi) {
+                return response()->json([
+                    'erro' => 's',
+                    'msg' => 'Heroi nao encontrado',
+                ], 404);
+            }
+
+            if ($usuario->id == $heroi->user_id) {
                 $heroi->nome = $request->nome;
                 $heroi->codinome = $request->codinome;
                 $heroi->idade = $request->idade;
@@ -172,72 +214,67 @@ class TestController extends Controller
 
                 $data = [
                     'erro' => 'n',
-                    'msg' => 'heroi Alterado',
+                    'msg' => 'Heroi Alterado',
                     'heroi' => $heroi,
                 ];
-            } else {
-                $data = [
-                    "erro" => 's',
-                    "msg" => 'Usuario não pode alterar o que não cadastrou'
-                ];
-                return response()->json($data,200);
+
+                return response()->json($data, 200);
             }
 
-            return response()->json($data,200);
-
+            return response()->json([
+                'erro' => 's',
+                'msg' => 'Usuario nao pode alterar o que nao cadastrou',
+            ], 403);
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    public function deletar_heroi($id) {
+    public function deletar_heroi($id)
+    {
         $heroi = MarvelModel::find($id);
 
         return view('deletar_heroi')->with('heroi', $heroi);
     }
 
-    // CORREÇÃO 4: Método deleta_heroi com verificação de dono
-    public function deleta_heroi(Request $request){
+    public function deleta_heroi(Request $request)
+    {
         $request->validate([
             'heroi_id' => 'required',
         ]);
-        
+
         try {
-            $usuario = $request->usuario;
+            $usuario = $this->resolveUsuario($request);
+            if (!$usuario) {
+                return response()->json([
+                    'erro' => 's',
+                    'msg' => 'Usuario nao autenticado',
+                ], 401);
+            }
+
             $heroi = MarvelModel::find($request->heroi_id);
-            
-            // Verifica se o herói existe
             if (!$heroi) {
                 return response()->json([
                     'erro' => 's',
-                    'msg' => 'Herói não encontrado'
+                    'msg' => 'Heroi nao encontrado',
                 ], 404);
             }
-            
-            // CORREÇÃO: Verifica se o usuário é o dono
-            if($usuario->id == $heroi->user_id){
+
+            if ($usuario->id == $heroi->user_id) {
                 $heroi->delete();
-                $data = [
+
+                return response()->json([
                     'erro' => 'n',
-                    'msg' => 'heroi deletado'
-                ];
-            } else {
-                $data = [
-                    'erro' => 's',
-                    'msg' => 'Este herói não foi cadastrado por este usuário'
-                ];
+                    'msg' => 'Heroi deletado',
+                ], 200);
             }
-            
-            return response()->json($data,200);
-            
+
+            return response()->json([
+                'erro' => 's',
+                'msg' => 'Este heroi nao foi cadastrado por este usuario',
+            ], 403);
         } catch (\Throwable $th) {
             throw $th;
         }
-    }
-
-    public function lista_herois() {
-        $herois = MarvelModel::get()->all();
-        
-        return view('heroi')->with('herois', $herois);
     }
 }

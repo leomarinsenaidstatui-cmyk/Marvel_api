@@ -1,0 +1,4 @@
+[mcp_servers.laravel-boost]
+command = "php"
+args = ["artisan", "boost:mcp"]
+cwd = "C:\\Users\\44432863811\\Downloads\\projeto\\projeto\\Projeto_Laravel\\api_marvel"
