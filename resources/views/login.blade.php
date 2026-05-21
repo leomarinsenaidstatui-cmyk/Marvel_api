@@ -688,6 +688,7 @@
 
 
     $("#botao-login").click(function(){
+        alert("clicou");
 
         $.ajax({
             url: "../api/login_novo" ,
@@ -704,8 +705,9 @@
             success: function (res) {
                 console.log(res);
                 if(res['erro']=='n'){
-                    alert(res['token'])
-                    $.cookie('token',res['token'],{expire:7});
+                    alert(res['token']);
+                    $.cookie('token',res['token'],{expire:7, path:'/'});
+                    $.cookie('user_id',res['user_id'],{expire:7, path:'/'});
                     setTimeout(function() {
                         window.location.href="/herois";
                         
@@ -713,8 +715,12 @@
 
                    
                 }else{
-                alert("Usuario nao Encontrado");
-                console.log(res);
+               if (res['msg'] == 'autentica_ativa') {
+                alert('Código de autenticação enviado para seu email. Por favor, verifique e digite o código para acessar.');
+               setTimeout(function() {
+                    window.location.href = "/digita_codigo";
+                }, 2000);
+            }
                 
             }
             },

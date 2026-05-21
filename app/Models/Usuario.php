@@ -15,7 +15,7 @@ class Usuario extends Model
         'senha',
         'telefone',
         'nascimento',
-        'genero'
-
+        'genero',
+        'dupla_autentica'
     ];
 }

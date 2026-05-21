@@ -11,6 +11,7 @@
     
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
    
     
    
@@ -86,32 +87,37 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(document).ready(function(){
+    let token = $.cookie('token');
+    if (!token) {
+        alert("Voce precisa fazer login novamente.");
+        window.location.href = "/entrar";
+        return;
+    }
 
-    alert("TO FUNFANDO");
-
-
-    $("#botao").click(function(){
+    $("#button").click(function(){
 
         $.ajax({
             url: "../api/deleta_heroi" ,
             method: "DELETE",
+            headers: {
+                "Authorization": "Bearer " + token,
+                "X-API-Token": token
+            },
             data: { 
-               id_heroi:$("#heroi_id").val(),
-            nome: $("#nome").val(),
-                codinome: $("#codinome").val(),
-                idade: $("#idade").val(),
-                habilidades: $("#habilidades").val(),
-                equipe: $("#equipe").val(),
-                primeira_aparicao: $("#primeira_aparicao").val(),
-            ano_lancamento:$("#ano_lancamento").val(),
+               token: token,
+               heroi_id: $("#heroi_id").val(),
              },
             success: function (res) {
-
-                alert("deletado")
-                console.log(res);
-                window.location.href = '/herois'
+                if(res['erro'] == 'n'){
+                    alert("Heroi deletado com sucesso!");
+                    window.location.href = '/herois';
+                } else {
+                    alert(res.msg || "Erro ao deletar heroi!");
+                }
             },
-
+            error: function(xhr) {
+                alert(xhr.responseJSON?.msg || "Erro ao deletar heroi!");
+            },
         });
 
     });

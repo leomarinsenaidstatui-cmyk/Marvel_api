@@ -937,7 +937,7 @@
     <nav class="navbar">
         <div class="logo">MARVEL</div>
         <ul class="nav-links">
-            <li><a href="{{route('welcome')}}"><i class="bi bi-house-door-fill"></i> Início</a></li>
+            <li><a href="{{route('dashboard')}}"><i class="bi bi-house-door-fill"></i> Início</a></li>
             <li><a href="{{route('herois')}}"><i class="bi bi-shield-fill"></i> Heróis</a></li>
             <li><a href="{{route('quadrinhos')}}"><i class="bi bi-book-fill"></i> Quadrinhos</a></li>
             <li><a href="{{route('entrar')}}"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>

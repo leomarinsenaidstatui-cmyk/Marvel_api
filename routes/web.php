@@ -34,25 +34,30 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/home', function () {
+    return redirect()->route('dashboard');
+})->middleware(['auth', 'verified'])->name('home');
+
 Route::get('/visualiza_heroi/{id_heroi}', [TestController::class, 'visualiza_heroi']);
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/herois', [TestController::class, 'lista_herois'])->name('herois');
-    
-    // Rotas que precisam de autenticação
-    Route::get('/cadastro_quadrinhos', function () {
-        return view('cadastro_quadrinho');
-    })->name('lancar_quadrinhos');
-    
-    Route::get('/edita_quadrinho/{quadrinhos}', [QuadrinhosController::class, 'mostra_quadrinho'])->name('edita_quadrinhos');
-    
-    // Rota protegida para listar quadrinhos
-    Route::get('/quadrinhos', [QuadrinhosController::class, 'lista_quadrinhos'])->name('quadrinhos');
+Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+// Rotas que precisam de autenticacao
+Route::get('/cadastro_quadrinhos', function () {
+    return view('cadastro_quadrinho');
+})->name('lancar_quadrinhos');
 
 
-// Rotas públicas
-Route::get('/herois', [TestController::class, 'lista_herois'])->name('herois');
+Route::get('digita_codigo', function () {
+    return view('digita_codigo');
+})->name('digitar_codigo');
+
+Route::get('/edita_quadrinho/{quadrinhos}', [QuadrinhosController::class, 'mostra_quadrinho'])->name('edita_quadrinhos');
+Route::get('/quadrinhos', [QuadrinhosController::class, 'lista_quadrinhos'])->name('quadrinhos');
+
+// Rotas publicas
+Route::get('/herois', [TestController::class, 'lista_herois_web'])->name('herois');
 
 require __DIR__.'/auth.php';

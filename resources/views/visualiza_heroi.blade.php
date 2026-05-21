@@ -77,11 +77,20 @@
     $(document).ready(function() {
         
         let token = $.cookie('token');
+        if (!token) {
+            alert("Voce precisa fazer login novamente.");
+            window.location.href = "/entrar";
+            return;
+        }
 
         $("#button").click(function() {
             $.ajax({
                 url: "/api/altera_heroi",
                 method: "PUT",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "X-API-Token": token
+                },
                 data: {
                     token: token,
                     heroi_id: $("#heroi_id").val(),
@@ -112,6 +121,10 @@
                 $.ajax({
                     url: "../api/deleta_heroi",
                     method: "DELETE",
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "X-API-Token": token
+                    },
                     data: {
                         token: token,
                         heroi_id: $("#heroi_id").val(),
