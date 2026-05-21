@@ -22,6 +22,18 @@ Route::get('/entrar', function () {
     return view('login');
 })->name('entrar');
 
+Route::get('/esqueci-senha', function () {
+    return view('auth.forgot-password-custom');
+})->name('senha.esqueci');
+
+Route::get('/senha/codigo', function () {
+    return view('auth.confirm-reset-code');
+})->name('senha.codigo');
+
+Route::get('/senha/redefinir', function () {
+    return view('auth.reset-password-custom');
+})->name('senha.redefinir');
+
 Route::get('/perfil', function () {
     return view('perfil');
 })->name('perfil')->middleware('auth');

@@ -254,32 +254,7 @@ public function mostra_quadrinho($quadrinho){
         }
     }
 
-
-            $data = [
-                'erro' => 'n',
-                'msg' => 'Quadrinho Alterado',
-                'quadrinho' => $quadrinho,
-            ];
-         }else{
-
-             $data=[
-                "erro" => 's',
-                "msg" => 'Usuario não pode alterar oque não cadastrou'
-            ];
-            return response()->json($data,200);
-
-            }
-
-            return response()->json($data,200);
-
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-    
-}
-
-
-  public function deletar_quadrinho ($id)
+    public function deletar_quadrinho ($id)
     {
         $quadrinho = QuadrinhosModel::find($id);
 

@@ -13,6 +13,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/marvel-sweetalert.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Montserrat:wght@300;400;600;700;800&display=swap');
 

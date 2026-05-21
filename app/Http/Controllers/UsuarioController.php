@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\EnviaEmail;
+use App\Jobs\AutenticaJob;
+use App\Jobs\RecuperaSenhaJob;
 use App\Models\TokenUser;
 use App\Models\Usuario;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
-use App\Jobs\AutenticaJob;
 use App\Models\CodigoEmail;
 
 class UsuarioController extends Controller
@@ -130,8 +131,141 @@ public function enviar_codigo(Request $request){
         }
 
         return response()->json([
-            'erro' => 'n',
+            'erro' => 's',
             'msg' => 'autentica_ativa',
+        ], 200);
+    }
+
+    public function solicitar_codigo_recuperacao(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'erro' => 's',
+                'msg' => 'Dados inválidos',
+                'validacao' => $validator->errors(),
+            ], 422);
+        }
+
+        $usuario = Usuario::where('email', $request->email)->first();
+
+        if (!$usuario) {
+            return response()->json([
+                'erro' => 's',
+                'msg' => 'Usuário não encontrado',
+            ], 404);
+        }
+
+        try {
+            RecuperaSenhaJob::dispatch($usuario);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'erro' => 's',
+                'msg' => 'Falha ao enviar código de recuperação',
+                'detalhes' => $th->getMessage(),
+            ], 500);
+        }
+
+        return response()->json([
+            'erro' => 'n',
+            'msg' => 'Código enviado para o seu e-mail',
+        ], 200);
+    }
+
+    public function confirmar_codigo_recuperacao(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'codigo' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'erro' => 's',
+                'msg' => 'Dados inválidos',
+                'validacao' => $validator->errors(),
+            ], 422);
+        }
+
+        $codigoEmail = CodigoEmail::where('email', $request->email)
+            ->where('codigo', $request->codigo)
+            ->where('valido_ate', '>', Carbon::now())
+            ->first();
+
+        if (!$codigoEmail) {
+            return response()->json([
+                'erro' => 's',
+                'msg' => 'Código inválido ou expirado',
+            ], 422);
+        }
+
+        $usuario = Usuario::where('email', $request->email)->first();
+        TokenUser::where('user_id', $usuario->id)->delete();
+
+        $token = new TokenUser;
+        $token->user_id = $usuario->id;
+        $token->token = md5($usuario->id . $usuario->email . now()->timestamp . random_int(1000, 9999));
+        $token->valido_ate = Carbon::now()->addMinutes(30);
+        $token->save();
+
+        CodigoEmail::where('email', $request->email)->delete();
+
+        return response()->json([
+            'erro' => 'n',
+            'msg' => 'Código verificado',
+            'token' => $token->token,
+        ], 200);
+    }
+
+    public function resetar_senha(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'token' => 'required',
+            'senha' => 'required|min:6',
+            'senha_confirmation' => 'required|same:senha',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'erro' => 's',
+                'msg' => 'Dados inválidos',
+                'validacao' => $validator->errors(),
+            ], 422);
+        }
+
+        $token = TokenUser::where('token', $request->token)
+            ->where('valido_ate', '>', Carbon::now())
+            ->first();
+
+        if (!$token) {
+            return response()->json([
+                'erro' => 's',
+                'msg' => 'Token inválido ou expirado',
+            ], 401);
+        }
+
+        $usuario = Usuario::find($token->user_id);
+
+        if (!$usuario || $usuario->email !== $request->email) {
+            return response()->json([
+                'erro' => 's',
+                'msg' => 'Usuário não encontrado',
+            ], 404);
+        }
+
+        $usuario->senha = md5($request->senha);
+        $usuario->save();
+
+        CodigoEmail::where('email', $request->email)->delete();
+        TokenUser::where('token', $request->token)->delete();
+
+        return response()->json([
+            'erro' => 'n',
+            'msg' => 'Senha redefinida com sucesso',
         ], 200);
     }
 

@@ -3,12 +3,12 @@ $(document).ready(function () {
         let userId = $.cookie('user_id');
 
         if (!userId) {
-            Swal.fire({
+            marvelSwal({
                 title: 'LOGIN NECESSARIO',
                 text: 'Faca login para cadastrar herois.',
                 icon: 'warning',
-                confirmButtonColor: '#ad2121',
-                background: '#fff'
+                iconColor: '#ffd700',
+                confirmButtonColor: '#ad2121'
             });
             return;
         }
@@ -27,7 +27,7 @@ $(document).ready(function () {
             },
             success: function (res) {
                 if (res['erro'] == 'n') {
-                    Swal.fire({
+                    marvelSwal({
                         title: 'HEROI CADASTRADO!',
                         html: `
                             <div style="text-align: center;">
@@ -39,7 +39,6 @@ $(document).ready(function () {
                         `,
                         icon: 'success',
                         iconColor: '#ffd700',
-                        background: '#fff',
                         confirmButtonColor: '#ad2121',
                         confirmButtonText: 'VER HEROIS',
                         allowOutsideClick: false,
@@ -52,26 +51,24 @@ $(document).ready(function () {
                         }
                     });
                 } else {
-                    Swal.fire({
+                    marvelSwal({
                         title: 'ERRO!',
                         text: res.msg || 'Nao foi possivel cadastrar o heroi.',
                         icon: 'error',
                         iconColor: '#ad2121',
-                        confirmButtonColor: '#ad2121',
-                        background: '#fff'
+                        confirmButtonColor: '#ad2121'
                     });
                 }
             },
             error: function (xhr) {
                 if (xhr.status !== 403) {
-                    Swal.fire({
+                    marvelSwal({
                         title: 'ERRO!',
                         text: xhr.responseJSON?.msg || 'Nao foi possivel cadastrar o heroi. Tente novamente.',
                         icon: 'error',
                         iconColor: '#ad2121',
                         confirmButtonColor: '#ad2121',
-                        confirmButtonText: 'OK',
-                        background: '#fff'
+                        confirmButtonText: 'OK'
                     });
                 }
             }

@@ -1,16 +1,11 @@
 $(document).ready(function() {
-    
-    
-    
+
     // Sweet Alert de boas-vindas (substitui o alert("to funfando"))
-    Swal.fire({
-        title: '‚ö° MARVEL QUADRINHOS ‚ö°',
+    marvelSwal({
+        title: '? MARVEL QUADRINHOS ?',
         text: 'Sistema de quadrinhos carregado!',
         icon: 'success',
         iconColor: '#ffd700',
-        background: '#fff',
-        confirmButtonColor: '#ad2121',
-        confirmButtonText: 'ENTRAR',
         timer: 2000,
         timerProgressBar: true,
         showConfirmButton: false,
@@ -41,8 +36,8 @@ $(document).ready(function() {
                     console.log(res);
                     
                     // Sweet Alert de sucesso (substitui o alert('deu bom'))
-                    Swal.fire({
-                        title: 'QUADRINHO ATUALIZADO! ‚ö°',
+                    marvelSwal({
+                        title: 'QUADRINHO ATUALIZADO! ?',
                         html: `
                             <div style="text-align: center;">
                                 <i class="bi bi-book-fill" style="font-size: 3rem; color: #ffd700;"></i>
@@ -53,7 +48,6 @@ $(document).ready(function() {
                         `,
                         icon: 'success',
                         iconColor: '#ffd700',
-                        background: '#fff',
                         confirmButtonColor: '#ad2121',
                         confirmButtonText: 'VER QUADRINHOS',
                         allowOutsideClick: false,
@@ -66,29 +60,27 @@ $(document).ready(function() {
                         }
                     });
                 } else {
-                    Swal.fire({
-                        title: 'ERRO! üí•',
-                        text: res.msg || 'N√£o foi poss√≠vel atualizar o quadrinho.',
+                    marvelSwal({
+                        title: 'ERRO! ??',
+                        text: res.msg || 'N„o foi possÌvel atualizar o quadrinho.',
                         icon: 'error',
                         iconColor: '#ad2121',
-                        confirmButtonColor: '#ad2121',
-                        background: '#fff'
+                        confirmButtonColor: '#ad2121'
                     });
                 }
             },
             error: function(xhr) {
                 console.log("Erro ao consultar status Pix:", xhr.responseText);
                 
-                // Sweet Alert de erro (se n√£o for 403, que j√° foi tratado globalmente)
+                // Sweet Alert de erro (se n„o for 403, que j· foi tratado globalmente)
                 if(xhr.status !== 403){
-                    Swal.fire({
-                        title: 'ERRO! üí•',
-                        text: xhr.responseJSON?.msg || 'N√£o foi poss√≠vel atualizar o quadrinho. Tente novamente.',
+                    marvelSwal({
+                        title: 'ERRO! ??',
+                        text: xhr.responseJSON?.msg || 'N„o foi possÌvel atualizar o quadrinho. Tente novamente.',
                         icon: 'error',
                         iconColor: '#ad2121',
                         confirmButtonColor: '#ad2121',
-                        confirmButtonText: 'OK',
-                        background: '#fff'
+                        confirmButtonText: 'OK'
                     });
                 }
             }
@@ -97,18 +89,16 @@ $(document).ready(function() {
 
     $("#botao").click(function() {
         
-        // Sweet Alert de confirma√ß√£o antes de deletar
-        Swal.fire({
+        // Sweet Alert de confirmaÁ„o antes de deletar
+        marvelConfirm({
             title: 'EXCLUIR QUADRINHO?',
-            text: "Esta a√ß√£o n√£o poder√° ser desfeita!",
+            text: "Esta aÁ„o n„o poder· ser desfeita!",
             icon: 'warning',
             iconColor: '#ffd700',
-            showCancelButton: true,
             confirmButtonColor: '#ad2121',
             cancelButtonColor: '#6c757d',
             confirmButtonText: 'SIM, EXCLUIR',
             cancelButtonText: 'CANCELAR',
-            background: '#fff',
             customClass: {
                 title: 'marvel-swal-title'
             }
@@ -125,9 +115,9 @@ $(document).ready(function() {
                     success: function(res) {
                         if(res['erro'] == 'n'){
                             
-                            // Sweet Alert de sucesso na exclus√£o (substitui o alert("deletado"))
-                            Swal.fire({
-                                title: 'QUADRINHO EXCLU√çDO! ‚ö°',
+                            // Sweet Alert de sucesso na exclus„o (substitui o alert("deletado"))
+                            marvelSwal({
+                                title: 'QUADRINHO EXCLUÕDO! ?',
                                 html: `
                                     <div style="text-align: center;">
                                         <i class="bi bi-trash-fill" style="font-size: 3rem; color: #ffd700;"></i>
@@ -140,7 +130,6 @@ $(document).ready(function() {
                                 iconColor: '#ffd700',
                                 confirmButtonColor: '#ad2121',
                                 confirmButtonText: 'OK',
-                                background: '#fff',
                                 timer: 2000,
                                 timerProgressBar: true,
                                 showConfirmButton: false
@@ -150,28 +139,26 @@ $(document).ready(function() {
                             
                             console.log(res);
                         } else {
-                            Swal.fire({
-                                title: 'ERRO! üí•',
-                                text: res.msg || 'N√£o foi poss√≠vel excluir o quadrinho.',
+                            marvelSwal({
+                                title: 'ERRO! ??',
+                                text: res.msg || 'N„o foi possÌvel excluir o quadrinho.',
                                 icon: 'error',
                                 iconColor: '#ad2121',
-                                confirmButtonColor: '#ad2121',
-                                background: '#fff'
+                                confirmButtonColor: '#ad2121'
                             });
                         }
                     },
                     error: function(xhr) {
                         console.log("Erro ao deletar:", xhr.responseText);
                         
-                        // Sweet Alert de erro na exclus√£o (se n√£o for 403, que j√° foi tratado globalmente)
+                        // Sweet Alert de erro na exclus„o (se n„o for 403, que j· foi tratado globalmente)
                         if(xhr.status !== 403){
-                            Swal.fire({
-                                title: 'ERRO! üí•',
-                                text: xhr.responseJSON?.msg || 'N√£o foi poss√≠vel excluir o quadrinho.',
+                            marvelSwal({
+                                title: 'ERRO! ??',
+                                text: xhr.responseJSON?.msg || 'N„o foi possÌvel excluir o quadrinho.',
                                 icon: 'error',
                                 iconColor: '#ad2121',
-                                confirmButtonColor: '#ad2121',
-                                background: '#fff'
+                                confirmButtonColor: '#ad2121'
                             });
                         }
                     }
@@ -181,34 +168,3 @@ $(document).ready(function() {
     });
 
 });
-
-// Estilos adicionais para o SweetAlert
-const style = document.createElement('style');
-style.innerHTML = `
-    .marvel-swal-title {
-        font-family: 'Bangers', cursive !important;
-        color: #ad2121 !important;
-        font-size: 2rem !important;
-        letter-spacing: 2px !important;
-        text-shadow: 2px 2px 0 #ffd700 !important;
-    }
-    
-    .swal2-popup {
-        border-radius: 20px !important;
-        border: 3px solid #ffd700 !important;
-        box-shadow: 0 10px 30px rgba(173, 33, 33, 0.5) !important;
-    }
-    
-    .swal2-icon-success {
-        border-color: #ffd700 !important;
-    }
-    
-    .swal2-icon-warning {
-        border-color: #ffd700 !important;
-    }
-    
-    .swal2-icon-error {
-        border-color: #ad2121 !important;
-    }
-`;
-document.head.appendChild(style);
